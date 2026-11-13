@@ -1,0 +1,443 @@
+FDS PRACTICAL EXAM – SIMPLE PROGRAMS WITH OUTPUT
+Programs are kept short and easy to write. Install required libraries before running: pip install numpy pandas matplotlib seaborn scipy
+Question 1: Merge three NumPy arrays in three ways
+Program:
+import numpy as np
+a = np.array([1, 2])
+b = np.array([3, 4])
+c = np.array([5, 6])
+
+print("Stacked:")
+print(np.stack((a, b, c)))
+print("Vertical:")
+print(np.vstack((a, b, c)))
+print("Horizontal:")
+print(np.hstack((a, b, c)))
+Output:
+Stacked:
+[[1 2]
+ [3 4]
+ [5 6]]
+Vertical:
+[[1 2]
+ [3 4]
+ [5 6]]
+Horizontal:
+[1 2 3 4 5 6]
+Question 2: Combine last element of first array with first element of second array
+Program:
+import numpy as np
+a = np.array(['PHP', 'JS', 'C++'])
+b = np.array(['Python', 'C#', 'NumPy'])
+
+a[-1] = a[-1] + b[0]
+result = np.concatenate((a, b[1:]))
+print("After Combining:")
+print(result)
+Output:
+After Combining:
+['PHP' 'JS' 'C++Python' 'C#' 'NumPy']
+Question 3: Group by first column and get second column values as lists
+Program:
+import pandas as pd
+df = pd.DataFrame({
+    'col1': ['C1','C1','C2','C2','C2','C3','C2'],
+    'col2': [1,2,3,3,4,6,5]
+})
+print(df.groupby('col1')['col2'].apply(list))
+Output:
+col1
+C1          [1, 2]
+C2    [3, 3, 4, 5]
+C3             [6]
+Name: col2, dtype: object
+Question 4: Count rows and columns of a DataFrame
+Program:
+import pandas as pd
+import numpy as np
+
+data = {
+    'name': ['Anastasia','Dima','Katherine','James','Emily',
+             'Michael','Matthew','Laura','Kevin','Jonas'],
+    'score': [12.5,9,16.5,np.nan,9,20,14.5,np.nan,8,19],
+    'attempts': [1,3,2,3,2,3,1,1,2,1],
+    'qualify': ['yes','no','yes','no','no','yes','yes','no','no','yes']
+}
+df = pd.DataFrame(data)
+print("Number of Rows:", df.shape[0])
+print("Number of Columns:", df.shape[1])
+Output:
+Number of Rows: 10
+Number of Columns: 4
+Question 5: Check inequality of two DataFrames
+Program:
+import pandas as pd
+import numpy as np
+
+df1 = pd.DataFrame({
+    'W':[68,75,86,80,np.nan], 'X':[78,85,np.nan,80,86],
+    'Y':[84,94,89,83,86], 'Z':[86,97,96,72,83]
+})
+df2 = pd.DataFrame({
+    'W':[78,75,86,80,np.nan], 'X':[78,85,96,80,76],
+    'Y':[84,84,89,83,86], 'Z':[86,97,96,72,83]
+})
+print(df1.ne(df2))
+Output:
+       W      X      Y      Z
+0   True  False  False  False
+1  False  False   True  False
+2  False   True  False  False
+3  False  False  False  False
+4   True   True  False  False
+Question 6: Perform EDA on Wine Quality dataset
+Program:
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv('winequality-red.csv', sep=';')
+print(df.head())
+print(df.info())
+print(df.describe())
+sns.countplot(data=df, x='quality')
+plt.title('Wine Quality')
+plt.show()
+sns.histplot(data=df, x='alcohol', kde=True)
+plt.title('Alcohol Distribution')
+plt.show()
+Output:
+First rows: displays first 5 wine records.
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1599 entries, 0 to 1598
+Data columns: 12 columns
+dtypes: float64(11), int64(1)
+The describe() output shows count, mean, std, min and max.
+Two graphs are displayed:
+1. Wine Quality count plot
+2. Alcohol distribution histogram
+Note: Exact table values depend on the winequality-red.csv file.
+Question 7: Perform EDA on email dataset
+Program:
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv('emails.csv')
+print(df.head())
+print(df.info())
+print(df.describe())
+print(df.isnull().sum())
+
+df['email_length'] = df['text'].astype(str).apply(len)
+print(df[['text','email_length']].head())
+
+sns.histplot(df['email_length'], bins=20)
+plt.title('Email Length')
+plt.show()
+
+df['spam'].value_counts().plot(kind='bar')
+plt.title('Email Categories')
+plt.xlabel('Category')
+plt.ylabel('Count')
+plt.show()
+Output:
+Displays:
+1. First five email records
+2. Dataset information and statistics
+3. Missing-value count for each column
+4. Email text with its length
+5. Histogram of email lengths
+6. Bar chart of spam and non-spam emails
+Note: Exact values depend on emails.csv. The file must contain 'text' and 'spam' columns.
+Question 8: Not provided in the uploaded lab-question sheet
+Program:
+No Question 8 is printed in the uploaded question sheet.
+Output:
+No output – question number 8 is missing from the sheet.
+Question 9: Not provided in the uploaded lab-question sheet
+Program:
+No Question 9 is printed in the uploaded question sheet.
+Output:
+No output – question number 9 is missing from the sheet.
+Question 10: Select rows where score is missing (NaN)
+Program:
+import pandas as pd
+import numpy as np
+
+data = {
+    'name':['Anastasia','Dima','Katherine','James','Emily',
+            'Michael','Matthew','Laura','Kevin','Jonas'],
+    'score':[12.5,9,16.5,np.nan,9,20,14.5,np.nan,8,19],
+    'attempts':[1,3,2,3,2,3,1,1,2,1],
+    'qualify':['yes','no','yes','no','no','yes','yes','no','no','yes']
+}
+df = pd.DataFrame(data, index=list('abcdefghij'))
+print(df[df['score'].isna()])
+Output:
+    name  score  attempts qualify
+d  James    NaN         3      no
+h  Laura    NaN         1      no
+Question 11: Correlation and scatter plot; histogram
+Program:
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.DataFrame({'Study':[1,2,3,4,5],
+                   'Marks':[40,50,60,70,80]})
+print(df.corr())
+plt.scatter(df['Study'], df['Marks'])
+plt.xlabel('Study')
+plt.ylabel('Marks')
+plt.title('Study vs Marks')
+plt.show()
+df['Marks'].plot(kind='hist')
+plt.title('Marks Histogram')
+plt.show()
+Output:
+Correlation:
+       Study  Marks
+Study    1.0    1.0
+Marks    1.0    1.0
+Displays a scatter plot and a marks histogram.
+Question 12: Correlation and scatter plot; bar chart
+Program:
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.DataFrame({'Study':[1,2,3,4],
+                   'Marks':[40,50,60,70]})
+print(df.corr())
+plt.scatter(df['Study'], df['Marks'])
+plt.title('Study vs Marks')
+plt.xlabel('Study')
+plt.ylabel('Marks')
+plt.show()
+df.plot(x='Study', y='Marks', kind='bar')
+plt.title('Study and Marks')
+plt.show()
+Output:
+Correlation:
+       Study  Marks
+Study    1.0    1.0
+Marks    1.0    1.0
+Displays a scatter plot and a bar chart.
+Question 13: Histogram and three-dimensional plotting
+Program:
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.DataFrame({'X':[1,2,3,4,5],
+                   'Y':[2,4,6,8,10],
+                   'Z':[3,5,7,9,11]})
+df['X'].plot(kind='hist')
+plt.title('Histogram')
+plt.show()
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(df['X'], df['Y'], df['Z'])
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+plt.title('3D Scatter Plot')
+plt.show()
+Output:
+Displays:
+1. Histogram of X values
+2. Three-dimensional scatter plot of X, Y and Z.
+Question 14: Correlation and scatter plot; three-dimensional plotting
+Program:
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.DataFrame({'X':[1,2,3,4,5],
+                   'Y':[2,4,6,8,10],
+                   'Z':[3,5,7,9,11]})
+print(df.corr())
+plt.scatter(df['X'], df['Y'])
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('Correlation Scatter Plot')
+plt.show()
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(df['X'], df['Y'], df['Z'])
+plt.title('3D Scatter Plot')
+plt.show()
+Output:
+Correlation:
+     X    Y    Z
+X  1.0  1.0  1.0
+Y  1.0  1.0  1.0
+Z  1.0  1.0  1.0
+Displays a scatter plot and a 3D scatter plot.
+Question 15: Count number of columns in a DataFrame
+Program:
+import pandas as pd
+df = pd.DataFrame({
+    'col1':[1,2,3,4,7],
+    'col2':[4,5,6,9,5],
+    'col3':[7,8,12,1,11]
+})
+print("Number of columns:", len(df.columns))
+Output:
+Number of columns: 3
+Question 16: Select all columns except one given column
+Program:
+import pandas as pd
+df = pd.DataFrame({
+    'col1':[1,2,3,4,7],
+    'col2':[4,5,6,9,5],
+    'col3':[7,8,12,1,11]
+})
+print(df.drop(columns=['col3']))
+Output:
+   col1  col2
+0     1     4
+1     2     5
+2     3     6
+3     4     9
+4     7     5
+Question 17: Use NumPy arrays to calculate weather statistics
+Program:
+import numpy as np
+
+temp = np.array([20, 22, 24, 26, 28])
+wind = np.array([10, 15, 20, 25, 40])
+
+print("Mean temperature:", np.mean(temp))
+print("Minimum temperature:", np.min(temp))
+print("Maximum temperature:", np.max(temp))
+print("Temperature standard deviation:", round(np.std(temp), 2))
+print("Mean wind speed:", np.mean(wind))
+print("Maximum wind speed:", np.max(wind))
+print("High wind hours:", np.sum(wind > 35))
+Output:
+Mean temperature: 24.0
+Minimum temperature: 20
+Maximum temperature: 28
+Temperature standard deviation: 2.83
+Mean wind speed: 22.0
+Maximum wind speed: 40
+High wind hours: 1
+Question 18: Case study: EDA and visualization on a dataset
+Program:
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.DataFrame({
+    'Name':['A','B','C','D','E'],
+    'Marks':[70,80,60,90,75],
+    'Attendance':[85,90,75,95,80]
+})
+print(df.head())
+print(df.describe())
+print("Missing values:")
+print(df.isnull().sum())
+print("Average marks:", df['Marks'].mean())
+
+plt.scatter(df['Attendance'], df['Marks'])
+plt.xlabel('Attendance')
+plt.ylabel('Marks')
+plt.title('Attendance vs Marks')
+plt.show()
+
+df['Marks'].plot(kind='hist')
+plt.title('Marks Distribution')
+plt.show()
+Output:
+  Name  Marks  Attendance
+0    A     70          85
+1    B     80          90
+2    C     60          75
+3    D     90          95
+4    E     75          80
+
+Average marks: 75.0
+Missing values:
+Name          0
+Marks         0
+Attendance    0
+Displays dataset summary, scatter plot and histogram.
+Question 19: Append, slice, add and delete rows in a DataFrame
+Program:
+import pandas as pd
+
+df = pd.DataFrame({'Name':['A','B','C'],
+                   'Mark':[70,80,60]})
+print("Original:")
+print(df)
+
+new_row = pd.DataFrame([{'Name':'D','Mark':90}])
+df = pd.concat([df, new_row], ignore_index=True)
+print("After appending:")
+print(df)
+
+print("Slicing:")
+print(df[1:3])
+
+df.loc[len(df)] = ['E', 75]
+print("After adding row:")
+print(df)
+
+df = df.drop(1)
+print("After deleting row:")
+print(df)
+Output:
+Original:
+  Name  Mark
+0    A    70
+1    B    80
+2    C    60
+After appending:
+  Name  Mark
+0    A    70
+1    B    80
+2    C    60
+3    D    90
+Slicing:
+  Name  Mark
+1    B    80
+2    C    60
+After adding row:
+  Name  Mark
+0    A    70
+1    B    80
+2    C    60
+3    D    90
+4    E    75
+After deleting row:
+  Name  Mark
+0    A    70
+2    C    60
+3    D    90
+4    E    75
+Question 20: Line, scatter and histogram plots
+Program:
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.DataFrame({'Day':[1,2,3,4,5],
+                   'Sales':[10,20,15,25,30]})
+df.plot(x='Day', y='Sales', kind='line', marker='o')
+plt.title('Line Plot')
+plt.show()
+
+plt.scatter(df['Day'], df['Sales'])
+plt.title('Scatter Plot')
+plt.xlabel('Day')
+plt.ylabel('Sales')
+plt.show()
+
+df['Sales'].plot(kind='hist')
+plt.title('Sales Histogram')
+plt.show()
+Output:
+Displays:
+1. Line graph of day versus sales
+2. Scatter plot of day versus sales
+3. Histogram of sales.
+
+Important: Questions 8 and 9 are not present in the uploaded LAB QUESTIONS PDF (the numbering jumps from 7 to 10). Questions 6 and 7 require the relevant CSV files in the same folder as the Python program. Plot questions produce graphs in a separate window rather than printed text.
